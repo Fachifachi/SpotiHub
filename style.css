@@ -489,6 +489,7 @@ main.mainContent article.bodyOfContent section div.containerElements article.ele
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  margin-top: .5em;
   font-size: 1em;
 }
 
