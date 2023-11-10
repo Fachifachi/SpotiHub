@@ -3,8 +3,10 @@ import { renderAlbumsHeader } from './headerAlbums'
 import { renderBiblioLogged } from './biblioLogged'
 import { renderBiblioUnlogged } from './biblioUnlogged'
 
-const { VITE_CORREO_USUARIO: userName,
-  VITE_PW_USUARIO: password } = import.meta.env
+
+const userName = "river"
+const password = "912"
+
 
 export function renderLogIn() {
   const loginHtml = document.createElement("article")
