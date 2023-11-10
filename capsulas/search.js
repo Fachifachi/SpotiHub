@@ -1,60 +1,47 @@
-import './stylesSearch.css'
+import './stylesSearch.css';
 
 export function renderSearch(btnHome, auxEvents) {
-    const punteroMain = document.querySelector('#idMain')
+    const punteroMain = document.querySelector('#idMain');
 
-
-    var containerSearch = document.createElement('article')
+    var containerSearch = document.createElement('article');
     containerSearch.innerHTML = `
-
-
-    <div id="mainSearchContainer" class="containerElements search-container">
-    <article class="containerOfSearch">
-    <header>
-
-      <div class="search-container">
-        <div class="search-box">
-          <input type="text" id="barraBusqueda" placeholder="Buscar en Spotify">
-          <button id="buscarButton">Buscar</button>
+        <div id="mainSearchContainer" class="containerElements search-container">
+            <article class="containerOfSearch">
+                <header>
+                    <div class="search-container">
+                        <div class="search-box">
+                            <input type="text" id="barraBusqueda" placeholder="Buscar en Spotify">
+                            <button id="buscarButton">Buscar</button>
+                        </div>
+                        <div id="botonesTipos">
+                            <button class="tipo-btn tipo-activo" value="artist">Artista</button>
+                            <button class="tipo-btn" value="album">Álbum</button>
+                            <button class="tipo-btn" value="track">Canción</button>
+                            <button class="tipo-btn" value="playlist">Playlist</button>
+                        </div>
+                    </div>
+                </header>
+                <section class="fromSpotify">
+                    <h2 class="text-result">Resultados de la búsqueda</h2>
+                    <div id="searchContainer" class="containerElements">
+                        <!-- Aquí se mostrarán los resultados de la búsqueda -->
+                    </div>
+                </section>
+            </article>
         </div>
-        <div id="botonesTipos">
-          <button class="tipo-btn tipo-activo" value="artist">Artista</button>
-          <button class="tipo-btn" value="album">Álbum</button>
-          <button class="tipo-btn" value="track">Canción</button>
-          <button class="tipo-btn" value="playlist">Playlist</button>
-        </div>
-      </div>
-    </header>
+    `;
 
-    <section class="fromSpotify">
-      <h2 class="text-result">Resultados de la búsqueda</h2>
-      <div id="searchContainer" class="containerElements">
-        <!-- Aquí se mostrarán los resultados de la búsqueda -->
-        <!-- Ejemplo de una card de resultado -->
-       
-
-      </div>
-    </section>
-  </article>
-  </div>
-    `
-
-    btnHome.addEventListener("click", () => {
-        removeSearch(containerSearch, auxEvents)
+    btnHome.addEventListener('click', () => {
+        removeSearch(containerSearch, auxEvents);
     });
 
-
-    punteroMain.appendChild(containerSearch)
-
-    //FUNCIONALIDADES
-
+    punteroMain.appendChild(containerSearch);
 
     var G_client_id = 'bc16d65feba34c608d8450e9d764d834';
     var G_client_secret = 'e3192148ff3e4499b1d11b79371c43df';
-    var token = ''; // Variable global para el token
-    const searchContainer = document.getElementById('searchContainer'); // Asegúrate de tener un contenedor con id "searchContainer"
+    var token = '';
+    const searchContainer = document.getElementById('searchContainer');
 
-    // Función para obtener un nuevo token
     function obtenerNuevoToken() {
         var authOptions = {
             method: 'POST',
@@ -78,30 +65,27 @@ export function renderSearch(btnHome, auxEvents) {
         buscarDatos();
     });
 
-
     document.getElementById('botonesTipos').addEventListener('click', function (event) {
         if (event.target.classList.contains('tipo-btn')) {
-
             document.querySelectorAll('.tipo-btn').forEach(btn => btn.classList.remove('tipo-activo'));
-            // Agregar la clase 'tipo-activo' solo al botón clickeado
             event.target.classList.add('tipo-activo');
-    
-            // estilos anteriores
             document.querySelectorAll('.tipo-btn').forEach(btn => {
-                btn.style.backgroundColor = 'rgb(139, 134, 134)'; // Estilo de botón inactivo
-                btn.style.color = '#fff'; // Color del texto de botón inactivo
+                btn.style.backgroundColor = 'rgb(139, 134, 134)';
+                btn.style.color = '#fff';
             });
-    
-            // botón activo
-            event.target.style.backgroundColor = ' rgb(61, 206, 61)'; // Estilo de botón activo
-            event.target.style.color = 'white'; // Color del texto de botón activo
+            event.target.style.backgroundColor = 'rgb(61, 206, 61)';
+            event.target.style.color = 'white';
         }
     });
+
     function buscarDatos() {
-        const tipoSeleccionado = document.querySelector('.tipo-btn.tipo-activo').value; // Actualizar selección de botones
+        const tipoSeleccionado = document.querySelector('.tipo-btn.tipo-activo').value;
         const barraBusqueda = document.getElementById('barraBusqueda');
         const busqueda = barraBusqueda.value.trim();
-
+    
+        // Limpiar el contenedor antes de realizar una nueva búsqueda
+        searchContainer.innerHTML = '';
+    
         if (busqueda) {
             fetch(`https://api.spotify.com/v1/search?q=${busqueda}&type=${tipoSeleccionado}`, {
                 method: 'GET',
@@ -112,26 +96,23 @@ export function renderSearch(btnHome, auxEvents) {
                 .then(response => response.json())
                 .then(data => {
                     console.log('Resultados de la búsqueda:', data);
-
-                    // Limpiar el contenedor antes de mostrar los nuevos resultados
-                    searchContainer.innerHTML = '';
-
-                    mostrarResultados(data, tipoSeleccionado); // Llama a la función para mostrar los resultados en la interfaz
+                    mostrarResultados(data, tipoSeleccionado);
                 })
                 .catch(error => {
                     console.error('Error al realizar la búsqueda:', error);
                 });
         } else {
             console.error('No se proporcionó un término de búsqueda válido');
+            mostrarAviso('Por favor, complete el campo de búsqueda.');
         }
     }
 
     function mostrarResultados(data, tipoSeleccionado) {
-        const resultados = data[tipoSeleccionado + 's'].items.slice(0, 12); // Limitar los resultados a 7 elementos
+        const resultados = data[tipoSeleccionado + 's'].items.slice(0, 12);
 
         resultados.forEach(resultado => {
             let src, name, href;
-            href = resultado.external_urls.spotify; // Obtener el enlace de Spotify
+            href = resultado.external_urls.spotify;
 
             if (tipoSeleccionado === 'track') {
                 if (resultado.album && resultado.album.images && resultado.album.images.length > 0) {
@@ -161,76 +142,82 @@ export function renderSearch(btnHome, auxEvents) {
             );
         });
     }
+
     function generateDiv(href, src, name, type) {
         const searchContainer = document.getElementById('searchContainer');
-    
+
         const article = document.createElement('article');
         article.classList.add('element', 'discoElementSpotify');
-    
+
         const imgDiv = document.createElement('div');
         imgDiv.classList.add('img');
-    
+
         const img = document.createElement('img');
         img.src = src;
         img.alt = `logo-${name}`;
         img.classList.add('result-img');
-    
+
         const textDiv = document.createElement('div');
         textDiv.classList.add('text');
-    
+
         const nameHeader = document.createElement('h3');
         nameHeader.classList.add('nombre');
-    
 
-        const maxLength = 11; // longitud máx
+        const maxLength = 11; // longitud máxima
         nameHeader.textContent = truncateText(name, maxLength);
-    
+
         const artistDiv = document.createElement('div');
         artistDiv.classList.add('artista');
         artistDiv.textContent = type;
-    
+
         const spotifyBtn = document.createElement('button');
         spotifyBtn.classList.add('goToSpotifyBtn');
         spotifyBtn.id = 'goToSpotify';
-    
+
         const svg = document.createElement('svg');
         svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
         svg.setAttribute('height', '1em');
         svg.setAttribute('viewBox', '0 0 384 512');
-    
+
         const path = document.createElement('path');
         path.setAttribute('d', 'M73...');
-    
+
         svg.appendChild(path);
         spotifyBtn.appendChild(svg);
-    
+
         imgDiv.appendChild(img);
         textDiv.appendChild(nameHeader);
         textDiv.appendChild(artistDiv);
-    
+
         article.appendChild(imgDiv);
         article.appendChild(textDiv);
         article.appendChild(spotifyBtn);
-    
+
         article.addEventListener('click', () => {
             window.open(href, '_blank');
         });
-    
+
         searchContainer.appendChild(article);
     }
-    
+
     function truncateText(text, maxLength) {
         return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
     }
-    // Obtener un nuevo token al inicio
+
+    function mostrarAviso(aviso) {
+        const searchContainer = document.getElementById('searchContainer');
+        const avisoDiv = document.createElement('div');
+        avisoDiv.classList.add('aviso');
+        avisoDiv.textContent = aviso;
+        searchContainer.appendChild(avisoDiv);
+    }
+
     obtenerNuevoToken();
 
-    // Renovación del token, no está clara su manipulación
-    setInterval(obtenerNuevoToken, 50 * 60 * 1000); // Renovar cada 50 minutos
-
+    setInterval(obtenerNuevoToken, 50 * 60 * 1000);
 }
 
 function removeSearch(containerSearch, auxEvents) {
-    containerSearch.innerHTML = ''
-    auxEvents.style.display = "block"
+    containerSearch.innerHTML = '';
+    auxEvents.style.display = 'block';
 }

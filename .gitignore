@@ -24,9 +24,6 @@ dist-ssr
 *.sw?
 
 #mi js
-
-devLau.js
-
 #env
 
 .env
