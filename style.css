@@ -607,18 +607,32 @@ section.aboutLegalUse div.copyright{
 
 /*RESPONSIVE A LOS 815PX, NAVBAR DE MÓVIL Y BIBLIOTECA OUT OF SIGHT XD*/
 @media (max-width: 859px){
-  section.nav{
+  section.nav {
     visibility: visible;
     position: fixed;
-    bottom: 0;
-    left:0;
+    top: 750px; /* Ajusta la altura según sea necesario */
+    left: 0;
     border-radius: 0;
-    z-index: 2;
+    z-index: 1;
     width: 100%;
-    height: 12%;
+
   }
-  ul.nav-containerItems{
+
+  ul.nav-containerItems {
+
+  }
+
+  li.nav-itemElement {
     position: fixed;
+    top: 100px; 
+  }
+
+  section.biblio {
+    visibility: visible;
+    position: fixed;
+    right: -800px;
+    transition: right 0.5s ease;
+    z-index: 1;
   }
   section.nav ul.nav-containerItems li.nav-itemElement button a h6{
     font-size: 2em;
@@ -628,13 +642,15 @@ section.aboutLegalUse div.copyright{
   }
   li.nav-itemElement{
     position: fixed;
-    top: 617px;
-    margin-left: 5%;
+    margin-top: 49em;
+    top: 10px;
+
   }
   section.biblio{
+
     visibility: visible;
     position: fixed;
-    right: -800px;
+
     transition: right 0.5s ease;
     z-index: 1;
   }
@@ -679,22 +695,22 @@ section.aboutLegalUse div.copyright{
 }
 @media(max-width:520px){
   section.nav ul.nav-containerItems li.nav-itemElement button a svg{
-    margin-left: 1em;
+    
   }
   #buscar{
-    margin-left: 37%;
+
   }
   #biblioteca-nav{
-    margin-left: 70%;
+    
   }
 }
-@media(max-width:400px){
+@media(max-width:490px){
   section.nav ul.nav-containerItems li.nav-itemElement button a svg{
-    margin-left: 0.5em;
+
   }
-  #biblioteca-nav{
-    margin-left: 68%;
-  }
+ h6{
+  display: none;
+ }
 }
 @media(max-width:280px){
   section.nav ul.nav-containerItems li.nav-itemElement button a svg{
@@ -720,3 +736,6 @@ section.favouritesAlbums-logged button.elementAlbumLogged{
   position: relative;
 }
 
+main.mainContent article.bodyOfContent section div.containerElements article.element a{
+  color: var(--color5);
+}
